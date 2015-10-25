@@ -16,6 +16,8 @@
 
 package com.justinwflory.ritcommandcenter;
 
+import com.justinwflory.ritcommandcenter.commands.FoodCommand;
+import com.justinwflory.ritcommandcenter.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,73 +28,39 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
-public class RitCommand
-        implements CommandExecutor
-{
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
-    {
-        if (strings.length == 0) {
-            commandSender.sendMessage(ChatColor.DARK_RED + "Incorrect command syntax: try /rit food");
-        } else {
-            try
-            {
-                commandSender.sendMessage(ChatColor.GREEN + "Open places to eat: ");
-                Document doc = Jsoup.connect("https://rit-apps.modolabs.net/dining/index").get();
-                Elements open = doc.select("li.kgo_location_open");
-                for (Iterator localIterator1 = open.iterator(); localIterator1.hasNext();)
-                {
-                    element = (Element)localIterator1.next();
-                    Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
-                    Element ahref = ahrefList.get(0);
-                    Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = adiv.get(0);
-                    Elements subDiv = div.getAllElements();
-                    for (Iterator localIterator2 = subDiv.iterator(); localIterator2.hasNext();)
-                    {
-                        subDivInfo = (Element)localIterator2.next();
-                        commandSender.sendMessage(ChatColor.GOLD + subDivInfo.text());
-                    }
-                    commandSender.sendMessage("");
-                }
-                Element element;
-                Element subDivInfo;
-                commandSender.sendMessage(ChatColor.GREEN + "Closed places to eat: ");
-                Elements close = doc.select("li.kgo_location_closed");
-                for (Element element : close)
-                {
-                    ahrefList = element.getElementsByClass("kgoui_list_item_action");
-                    Element ahref = (Element)ahrefList.get(0);
-                    Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = adiv.get(0);
-                    Elements subDiv = div.getAllElements();
-                    for (Element subDivInfo : subDiv) {
-                        commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
-                    }
-                    commandSender.sendMessage("");
-                }
-                Document doc2 = Jsoup.connect("https://rit-apps.modolabs.net/dining/index?feed=dining&start=15").get();
-                Elements close2 = doc2.select("li.kgo_location_closed");
-                for (Element element : close2)
-                {
-                    Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
-                    Element ahref = ahrefList.get(0);
-                    Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = adiv.get(0);
-                    Elements subDiv = div.getAllElements();
-                    for (Element subDivInfo : subDiv) {
-                        commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
-                    }
-                    commandSender.sendMessage("");
-                }
-            }
-            catch (IOException e)
-            {
-                Elements ahrefList;
-                e.printStackTrace();
-            }
+public class RitCommand implements CommandExecutor {
+
+    private Map<String, SubCommand> subcommands = new HashMap<String, SubCommand>() {{
+        for (SubCommand sc : Arrays.asList(new FoodCommand())) {
+            put(sc.getName(), sc);
         }
-        return true;
+    }};
+    private final String usage = this.getUsage();
+
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        if (args.length <= 0) {
+            sender.sendMessage(this.usage);
+        }
+        SubCommand arg = this.subcommands.get(args[0]);
+        if (arg == null) {
+            sender.sendMessage(this.usage);
+        } else {
+            String[] newArgs = new String[args.length - 1];
+            System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+            arg.exec(sender, newArgs);
+        }
+        return false;
+    }
+
+    private String getUsage() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ChatColor.GREEN + "Available commands:\n");
+        this.subcommands.values().stream().map(SubCommand::usage).map(s -> "/rit " + s).forEach(sb::append);
+        return sb.toString();
     }
 }
