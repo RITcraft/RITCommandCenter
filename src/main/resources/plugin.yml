@@ -1,0 +1,16 @@
+name: RITCommandCenter
+main: com.justinwflory.ritcommandcenter.RitCommandCenter
+version: 0.1.0
+description: RITCommandCenter is a Spigot plugin that retrieves useful information about the Rochester Institute of Technology.
+author: [VoidWhisperer, jflory7]
+website: https://github.com/RITcraft/RITCommandCenter
+
+commands:
+   rit:
+      description: Get information about the /rit command.
+      usage: /rit <food>
+
+permissions:
+    rit.food:
+        description: Show a list of dining areas open on campus.
+        default: true
