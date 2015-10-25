@@ -27,6 +27,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 public class RitCommand
         implements CommandExecutor
@@ -43,7 +44,7 @@ public class RitCommand
                 Elements open = doc.select("li.kgo_location_open");
                 for (Iterator localIterator1 = open.iterator(); localIterator1.hasNext();)
                 {
-                    element = (Element)localIterator1.next();
+                    Element element = (Element)localIterator1.next();
                     Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
                     Element ahref = ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
@@ -51,7 +52,7 @@ public class RitCommand
                     Elements subDiv = div.getAllElements();
                     for (Iterator localIterator2 = subDiv.iterator(); localIterator2.hasNext();)
                     {
-                        subDivInfo = (Element)localIterator2.next();
+                        Element subDivInfo = (Element)localIterator2.next();
                         commandSender.sendMessage(ChatColor.GOLD + subDivInfo.text());
                     }
                     commandSender.sendMessage("");
@@ -60,29 +61,29 @@ public class RitCommand
                 Element subDivInfo;
                 commandSender.sendMessage(ChatColor.GREEN + "Closed places to eat: ");
                 Elements close = doc.select("li.kgo_location_closed");
-                for (Element element : close)
+                for (Element element2 : close)
                 {
-                    ahrefList = element.getElementsByClass("kgoui_list_item_action");
+                    Elements ahrefList = element2.getElementsByClass("kgoui_list_item_action");
                     Element ahref = (Element)ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
                     Element div = adiv.get(0);
                     Elements subDiv = div.getAllElements();
-                    for (Element subDivInfo : subDiv) {
-                        commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
+                    for (Element subDivInfo2 : subDiv) {
+                        commandSender.sendMessage(ChatColor.RED + subDivInfo2.text());
                     }
                     commandSender.sendMessage("");
                 }
                 Document doc2 = Jsoup.connect("https://rit-apps.modolabs.net/dining/index?feed=dining&start=15").get();
                 Elements close2 = doc2.select("li.kgo_location_closed");
-                for (Element element : close2)
+                for (Element element2 : close2)
                 {
-                    Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
+                    Elements ahrefList = element2.getElementsByClass("kgoui_list_item_action");
                     Element ahref = ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
                     Element div = adiv.get(0);
                     Elements subDiv = div.getAllElements();
-                    for (Element subDivInfo : subDiv) {
-                        commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
+                    for (Element subDivInfo2 : subDiv) {
+                        commandSender.sendMessage(ChatColor.RED + subDivInfo2.text());
                     }
                     commandSender.sendMessage("");
                 }
