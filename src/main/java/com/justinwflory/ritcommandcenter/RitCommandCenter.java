@@ -20,6 +20,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -28,9 +29,11 @@ import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -39,9 +42,18 @@ import org.bukkit.material.MonsterEggs;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockIterator;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 public class RitCommandCenter extends JavaPlugin implements Listener {
 
     private static final int TABBY_SPAWN_RANGE = 3;
+    private final Map<UUID, Set<UUID>> muted = new HashMap<>();
 
     public void onEnable() {
         getCommand("rit").setExecutor(new RitCommand());
@@ -140,6 +152,50 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
         ItemStack regg = new ItemStack(Material.MONSTER_EGG, 1, EntityType.OCELOT.getTypeId());
         regg.getItemMeta().setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Ritchie");
         event.getPlayer().getInventory().addItem(regg);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void ping(AsyncPlayerChatEvent event) {
+        Iterator<Player> recip = event.getRecipients().iterator();
+        Set<Player> custom = new HashSet<>();
+        while (recip.hasNext()) {
+            Player p = recip.next();
+            if (event.getMessage().contains(p.getName())) {
+                recip.remove();
+                custom.add(p);
+            }
+        }
+        ChatColor lastColor = ChatColor.WHITE;
+        String[] msgs = event.getPlayer().getDisplayName().split(ChatColor.COLOR_CHAR + "");
+        if (msgs.length > 1) {
+            char[] arr = msgs[msgs.length - 1].toCharArray();
+            if (arr.length > 0) {
+                ChatColor fin = ChatColor.getByChar(arr[0]);
+                if (fin != null) {
+                    lastColor = fin;
+                }
+            }
+        }
+        final ChatColor text = lastColor;
+        custom.forEach(p -> {
+            Set<UUID> muted;
+            synchronized (muted = this.getMutedSet(p.getUniqueId())) {
+                if (!muted.contains(event.getPlayer().getUniqueId())) {
+                    p.sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage().replace(p.getName(), ChatColor.YELLOW + p.getName() + text)));
+                    p.playSound(p.getLocation(), Sound.ARROW_HIT, 0.85F, 1.35F);
+                }
+            }
+        });
+
+    }
+
+    private synchronized Set<UUID> getMutedSet(UUID uuid) {
+        Set<UUID> back = this.muted.get(uuid);
+        if (back == null) {
+            back = new HashSet<>();
+            this.muted.put(uuid, back);
+        }
+        return back;
     }
 
 }
