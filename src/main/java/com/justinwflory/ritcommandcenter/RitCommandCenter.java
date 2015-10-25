@@ -26,3 +26,7 @@ public class RitCommandCenter
         getCommand("rit").setExecutor(new RitCommand());
     }
 }
+
+//TODO if (event getItemInHand().getItemMeta().getCustomName().equals(ChatColor GOLD + "Ritchie")) { //make golden tabby cat }
+
+// if (tired) justin.goToSleep();
