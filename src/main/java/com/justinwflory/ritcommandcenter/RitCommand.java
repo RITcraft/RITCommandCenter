@@ -1,16 +1,32 @@
+/*
+ * Copyright 2015 RITcraft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.justinwflory.ritcommandcenter;
 
-import java.io.IOException;
-import java.util.Iterator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 public class RitCommand
         implements CommandExecutor
@@ -29,9 +45,9 @@ public class RitCommand
                 {
                     element = (Element)localIterator1.next();
                     Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
-                    Element ahref = (Element)ahrefList.get(0);
+                    Element ahref = ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = (Element)adiv.get(0);
+                    Element div = adiv.get(0);
                     Elements subDiv = div.getAllElements();
                     for (Iterator localIterator2 = subDiv.iterator(); localIterator2.hasNext();)
                     {
@@ -49,7 +65,7 @@ public class RitCommand
                     ahrefList = element.getElementsByClass("kgoui_list_item_action");
                     Element ahref = (Element)ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = (Element)adiv.get(0);
+                    Element div = adiv.get(0);
                     Elements subDiv = div.getAllElements();
                     for (Element subDivInfo : subDiv) {
                         commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
@@ -61,9 +77,9 @@ public class RitCommand
                 for (Element element : close2)
                 {
                     Elements ahrefList = element.getElementsByClass("kgoui_list_item_action");
-                    Element ahref = (Element)ahrefList.get(0);
+                    Element ahref = ahrefList.get(0);
                     Elements adiv = ahref.getElementsByClass("kgoui_list_item_textblock");
-                    Element div = (Element)adiv.get(0);
+                    Element div = adiv.get(0);
                     Elements subDiv = div.getAllElements();
                     for (Element subDivInfo : subDiv) {
                         commandSender.sendMessage(ChatColor.RED + subDivInfo.text());
