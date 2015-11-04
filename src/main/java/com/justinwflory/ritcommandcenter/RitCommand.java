@@ -22,15 +22,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class RitCommand implements CommandExecutor {
@@ -45,6 +39,7 @@ public class RitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length <= 0) {
             sender.sendMessage(this.usage);
+            return false;
         }
         SubCommand arg = this.subcommands.get(args[0]);
         if (arg == null) {
