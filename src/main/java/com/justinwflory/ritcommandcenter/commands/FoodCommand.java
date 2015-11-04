@@ -20,7 +20,7 @@ public class FoodCommand implements SubCommand {
     public void exec(CommandSender sender, String... args) {
         try {
             sender.sendMessage(ChatColor.GREEN + "Open places to eat: ");
-            Connection.Response r = Jsoup.connect("https://rit-apps.modolabs.net/dining/index").response();
+            Connection.Response r = Jsoup.connect("https://rit-apps.modolabs.net/dining/index").execute();
             System.out.println("Response: " + r.statusCode() + ", " + r.statusMessage());
             System.out.println("\tHeaders: " + r.headers());
             System.out.println("\tCookies: " + r.cookies());
