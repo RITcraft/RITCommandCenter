@@ -2,6 +2,7 @@ package com.justinwflory.ritcommandcenter.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,9 +18,14 @@ public class FoodCommand implements SubCommand {
 
     @Override
     public void exec(CommandSender sender, String... args) {
-            try {
+        try {
             sender.sendMessage(ChatColor.GREEN + "Open places to eat: ");
-            Document doc = Jsoup.connect("https://rit-apps.modolabs.net/dining/index").get();
+            Connection.Response r = Jsoup.connect("https://rit-apps.modolabs.net/dining/index").response();
+            System.out.println("Response: " + r.statusCode() + ", " + r.statusMessage());
+            System.out.println("\tHeaders: " + r.headers());
+            System.out.println("\tCookies: " + r.cookies());
+            System.out.println("\tBody:\n" + r.parse().toString());
+            Document doc = r.parse();
             Elements open = doc.select("li.kgo_location_open");
             for (Iterator localIterator1 = open.iterator(); localIterator1.hasNext(); ) {
                 Element element = (Element) localIterator1.next();
