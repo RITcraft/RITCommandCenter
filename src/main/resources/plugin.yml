@@ -8,7 +8,6 @@ website: https://github.com/RITcraft/RITCommandCenter
 commands:
    rit:
       description: Get information about the /rit command.
-      usage: /rit <food>
 
 permissions:
     rit.food:
