@@ -30,36 +30,46 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>com.justinwflory.ritcommandcenter</id>
-            <build>
-                <finalName>RITCommandCenter</finalName>
-                <directory>src/main/java/</directory>
-                <resources>
-                    <resource>
-                        <targetPath>.</targetPath>
-                        <filtering>true</filtering>
-                        <directory>${basedir}/src/main/resources/</directory>
-                        <includes>
-                            <include>*.yml</include>
-                        </includes>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
+    <build>
+        <finalName>${project.name}-v${project.version}</finalName>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                         <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.jsoup:jsoup</include>
+                                </includes>
+                            </artifactSet>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <repositories>
         <repository>
             <id>spigot-repo</id>
