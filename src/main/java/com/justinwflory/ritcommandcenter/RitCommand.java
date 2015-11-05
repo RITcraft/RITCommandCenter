@@ -39,7 +39,7 @@ public class RitCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length <= 0) {
             sender.sendMessage(this.usage);
-            return false;
+            return true;
         }
         SubCommand arg = this.subcommands.get(args[0]);
         if (arg == null) {
@@ -49,7 +49,7 @@ public class RitCommand implements CommandExecutor {
             System.arraycopy(args, 1, newArgs, 0, args.length - 1);
             arg.exec(sender, newArgs);
         }
-        return false;
+        return true;
     }
 
     private String getUsage() {
