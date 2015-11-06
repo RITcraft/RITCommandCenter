@@ -33,9 +33,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MonsterEggs;
@@ -58,6 +60,9 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
     public void onEnable() {
         getCommand("rit").setExecutor(new RitCommand());
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+
+        //Add custom furnace recipes
+        addSmeltRecipes();
     }
 
     @EventHandler
@@ -189,6 +194,32 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
 
     }
 
+    @EventHandler
+    public void onSmelt(FurnaceSmeltEvent e) {
+        int amnt = 1;
+        if (e.getSource().getType().equals(Material.GOLD_HELMET)) {
+            amnt = (int) Math.floor(5 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.IRON_HELMET)) {
+            amnt = (int) Math.floor(5 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.GOLD_CHESTPLATE)) {
+            amnt = (int) Math.floor(8 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.IRON_CHESTPLATE)) {
+            amnt = (int) Math.floor(8 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.GOLD_LEGGINGS)) {
+            amnt = (int) Math.floor(7 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.IRON_LEGGINGS)) {
+            amnt = (int) Math.floor(7 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.GOLD_BOOTS)) {
+            amnt = (int) Math.floor(4 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        } else if (e.getSource().getType().equals(Material.IRON_BOOTS)) {
+            amnt = (int) Math.floor(4 * (e.getSource().getDurability() / e.getSource().getType().getMaxDurability()));
+        }
+        if (amnt == 0) {
+            amnt = 1;
+        }
+        e.getResult().setAmount(amnt);
+    }
+
     private synchronized Set<UUID> getMutedSet(UUID uuid) {
         Set<UUID> back = this.muted.get(uuid);
         if (back == null) {
@@ -198,6 +229,21 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
         return back;
     }
 
+
+    private void addSmeltRecipes() {
+        ItemStack goldIngot = new ItemStack(Material.GOLD_INGOT, 1);
+        ItemStack ironIngot = new ItemStack(Material.IRON_INGOT, 1);
+
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_HELMET));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_CHESTPLATE));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_LEGGINGS));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_BOOTS));
+
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_HELMET));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_CHESTPLATE));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_LEGGINGS));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_BOOTS));
+    }
 }
 
 // if (tired) justin.goToSleep();
