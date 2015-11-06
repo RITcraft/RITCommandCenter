@@ -36,6 +36,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MonsterEggs;
@@ -58,6 +59,9 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
     public void onEnable() {
         getCommand("rit").setExecutor(new RitCommand());
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+
+        //Add custom furnace recipes
+        addSmeltRecipes();
     }
 
     @EventHandler
@@ -198,6 +202,21 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
         return back;
     }
 
+
+    private void addSmeltRecipes() {
+        ItemStack goldIngot = new ItemStack(Material.GOLD_INGOT, 1);
+        ItemStack ironIngot = new ItemStack(Material.IRON_INGOT, 1);
+
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_HELMET));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_CHESTPLATE));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_LEGGINGS));
+        Bukkit.addRecipe(new FurnaceRecipe(goldIngot,Material.GOLD_BOOTS));
+
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_HELMET));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_CHESTPLATE));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_LEGGINGS));
+        Bukkit.addRecipe(new FurnaceRecipe(ironIngot,Material.IRON_BOOTS));
+    }
 }
 
 // if (tired) justin.goToSleep();
