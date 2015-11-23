@@ -33,6 +33,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -198,6 +199,14 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
         return back;
     }
 
+    @EventHandler
+    public void onEntitySpawn(EntitySpawnEvent e) {
+        if (e.getLocation().getChunk().getEntities().length > 300) {
+            if (e.getEntityType() == EntityType.CHICKEN || e.getEntityType() == EntityType.SKELETON) {
+                e.setCancelled(true);
+            }
+        }
+    }
 }
 
 // if (tired) justin.goToSleep();
