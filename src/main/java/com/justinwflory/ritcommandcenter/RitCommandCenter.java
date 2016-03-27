@@ -182,7 +182,9 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
             synchronized (muted = this.getMutedSet(p.getUniqueId())) {
                 if (!muted.contains(event.getPlayer().getUniqueId())) {
                     p.sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage().replace(p.getName(), ChatColor.YELLOW + p.getName() + text)));
-                    p.playSound(p.getLocation(), Sound.ARROW_HIT, 0.85F, 1.35F);
+                    p.playSound(p.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER
+
+                            , 0.85F, 1.35F);
                 }
             }
         });
