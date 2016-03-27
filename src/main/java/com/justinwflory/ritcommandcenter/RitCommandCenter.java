@@ -201,5 +201,3 @@ public class RitCommandCenter extends JavaPlugin implements Listener {
     }
 
 }
-
-// if (tired) justin.goToSleep();
