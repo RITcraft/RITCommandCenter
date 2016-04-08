@@ -1,4 +1,4 @@
-RITCommandCenter
+RITCommandCenter [![Build Status](https://travis-ci.org/RITcraft/RITCommandCenter.svg?branch=master)](https://travis-ci.org/RITcraft/RITCommandCenter)
 ================
 
 
